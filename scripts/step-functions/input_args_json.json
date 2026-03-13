@@ -1,0 +1,292 @@
+{
+  "tables_to_process_bronze": [
+    {
+      "TABLE_NAME": "vendedores",
+      "PK": "codigo_empresa,codigo",
+      "WORKER_TYPE": "G.1X"
+    },
+    {
+      "TABLE_NAME": "clientes",
+      "PK": "codigo",
+      "WORKER_TYPE": "G.1X"
+    },
+    {
+      "TABLE_NAME": "empresas",
+      "PK": "codigo_filial",
+      "WORKER_TYPE": "G.1X"
+    },
+    {
+      "TABLE_NAME": "fornecedores",
+      "PK": "codigo",
+      "WORKER_TYPE": "G.1X"
+    },
+    {
+      "TABLE_NAME": "produtos",
+      "PK": "codigo",
+      "WORKER_TYPE": "G.1X"
+    },
+    {
+      "TABLE_NAME": "usuarios",
+      "PK": "codigo",
+      "WORKER_TYPE": "G.1X"
+    },
+    {
+      "TABLE_NAME": "depositos",
+      "PK": "codigo_deposito",
+      "WORKER_TYPE": "G.1X"
+    },
+    {
+      "TABLE_NAME": "estoques",
+      "PK": "codigo_empresa,codigo_produto",
+      "WORKER_TYPE": "G.1X"
+    },
+    {
+      "TABLE_NAME": "vendas_saldos",
+      "PK": "grupo_loja,classe,codigo_produto,data_inventario",
+      "WORKER_TYPE": "G.1X"
+    },
+    {
+      "TABLE_NAME": "vendas",
+      "PK": "",
+      "WORKER_TYPE": "G.1X"
+    },
+    {
+      "TABLE_NAME": "itens_vendas",
+      "PK": "",
+      "WORKER_TYPE": "G.1X"
+    },
+    {
+      "TABLE_NAME": "itens_trocas",
+      "PK": "",
+      "WORKER_TYPE": "G.1X"
+    },
+    {
+      "TABLE_NAME": "pagamentos",
+      "PK": "",
+      "WORKER_TYPE": "G.1X"
+    },
+    {
+      "TABLE_NAME": "contas_apagar",
+      "PK": "",
+      "WORKER_TYPE": "G.1X"
+    }
+  ],
+  "tables_to_process_silver": [
+    {
+      "SQL_FILE_NAME": "estoques_linx_principal.sql",
+      "TARGET_TABLE": "estoques_linx_principal",
+      "WRITE_MODE": "OVERWRITE"
+    },
+    {
+      "SQL_FILE_NAME": "fornecedores_linx_principal.sql",
+      "TARGET_TABLE": "fornecedores_linx_principal",
+      "WRITE_MODE": "OVERWRITE"
+    },
+    {
+      "SQL_FILE_NAME": "itens_trocas_2021.sql",
+      "TARGET_TABLE": "itens_trocas_2021",
+      "WRITE_MODE": "OVERWRITE"
+    },
+    {
+      "SQL_FILE_NAME": "itens_vendas_2021.sql",
+      "TARGET_TABLE": "itens_vendas_2021",
+      "WRITE_MODE": "OVERWRITE"
+    },
+    {
+      "SQL_FILE_NAME": "pagamentos_loja_linx_principal.sql",
+      "TARGET_TABLE": "pagamentos_loja_linx_principal",
+      "WRITE_MODE": "OVERWRITE"
+    },
+    {
+      "SQL_FILE_NAME": "vendas_5_anos_linx_principal.sql",
+      "TARGET_TABLE": "vendas_5_anos_linx_principal",
+      "WRITE_MODE": "OVERWRITE"
+    },
+    {
+      "SQL_FILE_NAME": "vendas_linx_principal_2021.sql",
+      "TARGET_TABLE": "vendas_linx_principal_2021",
+      "WRITE_MODE": "OVERWRITE"
+    },
+    {
+      "SQL_FILE_NAME": "vendas_saldos.sql",
+      "TARGET_TABLE": "vendas_saldos",
+      "WRITE_MODE": "OVERWRITE"
+    },
+    {
+      "SQL_FILE_NAME": "vendedores_linx_principal.sql",
+      "TARGET_TABLE": "vendedores_linx_principal",
+      "WRITE_MODE": "OVERWRITE"
+    }
+  ],
+  "tables_to_process_gold": {
+    "tier_1": [
+      {
+        "SQL_FILE_NAME": "vendas_linx_principal.sql",
+        "TARGET_TABLE": "vendas_linx_principal",
+        "WRITE_MODE": "OVERWRITE"
+      },
+      {
+        "SQL_FILE_NAME": "clientes_linx_principal.sql",
+        "TARGET_TABLE": "clientes_linx_principal",
+        "WRITE_MODE": "OVERWRITE"
+      },	  
+      {
+        "SQL_FILE_NAME": "aux_produtos_estoque_linx_principal.sql",
+        "TARGET_TABLE": "aux_produtos_estoque_linx_principal",
+        "WRITE_MODE": "OVERWRITE"
+      },
+      {
+        "SQL_FILE_NAME": "classe_produto.sql",
+        "TARGET_TABLE": "classe_produto",
+        "WRITE_MODE": "OVERWRITE"
+      },
+      {
+        "SQL_FILE_NAME": "pagamentos_loja.sql",
+        "TARGET_TABLE": "pagamentos_loja",
+        "WRITE_MODE": "OVERWRITE"
+      }
+    ],
+    "tier_2": [
+      {
+        "SQL_FILE_NAME": "aux_empresas_ult_venda_linx_principal.sql",
+        "TARGET_TABLE": "aux_empresas_ult_venda_linx_principal",
+        "WRITE_MODE": "OVERWRITE"
+      },
+      {
+        "SQL_FILE_NAME": "aux_clientes_ult_compra_linx_principal.sql",
+        "TARGET_TABLE": "aux_clientes_ult_compra_linx_principal",
+        "WRITE_MODE": "OVERWRITE"
+      },
+      {
+        "SQL_FILE_NAME": "aux_clientes_ult_vendedor_linx_principal.sql",
+        "TARGET_TABLE": "aux_clientes_ult_vendedor_linx_principal",
+        "WRITE_MODE": "OVERWRITE"
+      },
+      {
+        "SQL_FILE_NAME": "aux_clientes_frequencia_linx_principal.sql",
+        "TARGET_TABLE": "aux_clientes_frequencia_linx_principal",
+        "WRITE_MODE": "OVERWRITE"
+      },
+      {
+        "SQL_FILE_NAME": "aux_clientes_valor_linx_principal.sql",
+        "TARGET_TABLE": "aux_clientes_valor_linx_principal",
+        "WRITE_MODE": "OVERWRITE"
+      },
+      {
+        "SQL_FILE_NAME": "aux_produtos_venda_linx_principal.sql",
+        "TARGET_TABLE": "aux_produtos_venda_linx_principal",
+        "WRITE_MODE": "OVERWRITE"
+      }
+    ]
+  },
+  "tables_to_process_platinum": {
+    "tier_1": [
+      {
+        "SQL_FILE_NAME": "produtos_linx_principal.sql",
+        "TARGET_TABLE": "produtos_linx_principal",
+        "WRITE_MODE": "OVERWRITE"
+      },
+      {
+        "SQL_FILE_NAME": "vendas.sql",
+        "TARGET_TABLE": "vendas",
+        "WRITE_MODE": "OVERWRITE"
+      },
+      {
+        "SQL_FILE_NAME": "fornecedores_financeiro.sql",
+        "TARGET_TABLE": "fornecedores_financeiro",
+        "WRITE_MODE": "OVERWRITE"
+      },
+      {
+        "SQL_FILE_NAME": "fornecedores_final.sql",
+        "TARGET_TABLE": "fornecedores_final",
+        "WRITE_MODE": "OVERWRITE"
+      },
+      {
+        "SQL_FILE_NAME": "clientes_final.sql",
+        "TARGET_TABLE": "clientes_final",
+        "WRITE_MODE": "OVERWRITE"
+      },
+      {
+        "SQL_FILE_NAME": "lojas.sql",
+        "TARGET_TABLE": "lojas",
+        "WRITE_MODE": "OVERWRITE"
+      },
+      {
+        "SQL_FILE_NAME": "empresas.sql",
+        "TARGET_TABLE": "empresas",
+        "WRITE_MODE": "OVERWRITE"
+      },
+      {
+        "SQL_FILE_NAME": "despesas_realizadas.sql",
+        "TARGET_TABLE": "despesas_realizadas",
+        "WRITE_MODE": "OVERWRITE"
+      },
+      {
+        "SQL_FILE_NAME": "vendedores.sql",
+        "TARGET_TABLE": "vendedores",
+        "WRITE_MODE": "OVERWRITE"
+      },
+      {
+        "SQL_FILE_NAME": "vendas_5_anos.sql",
+        "TARGET_TABLE": "vendas_5_anos",
+        "WRITE_MODE": "OVERWRITE"
+      },
+      {
+        "SQL_FILE_NAME": "depositos_final.sql",
+        "TARGET_TABLE": "depositos_final",
+        "WRITE_MODE": "OVERWRITE"
+      }
+    ],
+    "tier_2": [
+      {
+        "SQL_FILE_NAME": "produtos_final.sql",
+        "TARGET_TABLE": "produtos_final",
+        "WRITE_MODE": "OVERWRITE"
+      },
+      {
+        "SQL_FILE_NAME": "receitas_realizadas.sql",
+        "TARGET_TABLE": "receitas_realizadas",
+        "WRITE_MODE": "OVERWRITE"
+      },
+      {
+        "SQL_FILE_NAME": "despesas_metas_padrao.sql",
+        "TARGET_TABLE": "despesas_metas_padrao",
+        "WRITE_MODE": "OVERWRITE"
+      },
+      {
+        "SQL_FILE_NAME": "despesas_orcadas.sql",
+        "TARGET_TABLE": "despesas_orcadas",
+        "WRITE_MODE": "OVERWRITE"
+      },
+      {
+        "SQL_FILE_NAME": "data_das_transacoes.sql",
+        "TARGET_TABLE": "data_das_transacoes",
+        "WRITE_MODE": "OVERWRITE"
+      },
+      {
+        "SQL_FILE_NAME": "estoques.sql",
+        "TARGET_TABLE": "estoques",
+        "WRITE_MODE": "OVERWRITE"
+      }
+    ],
+    "tier_3": [
+      {
+        "SQL_FILE_NAME": "contribuicao_despesas_cd.sql",
+        "TARGET_TABLE": "contribuicao_despesas_cd",
+        "WRITE_MODE": "OVERWRITE"
+      },
+      {
+        "SQL_FILE_NAME": "datas_financeiro.sql",
+        "TARGET_TABLE": "datas_financeiro",
+        "WRITE_MODE": "OVERWRITE"
+      }
+    ],
+    "tier_4": [
+      {
+        "SQL_FILE_NAME": "resultado_realizado.sql",
+        "TARGET_TABLE": "resultado_realizado",
+        "WRITE_MODE": "OVERWRITE"
+      }
+    ]
+  }
+}

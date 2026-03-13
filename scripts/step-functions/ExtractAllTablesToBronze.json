@@ -1,0 +1,45 @@
+{
+  "Comment": "State machine to extract multiple tables to Bronze using a generic Glue Job",
+  "StartAt": "IterateOverTables",
+  "States": {
+    "IterateOverTables": {
+      "Type": "Map",
+      "ItemsPath": "$.tables_to_process",
+      "MaxConcurrency": 5,
+      "Iterator": {
+        "StartAt": "RunGlueJobForTable",
+        "States": {
+          "RunGlueJobForTable": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::glue:startJobRun.sync",
+            "Parameters": {
+              "JobName": "bronze-extract-incremental",
+              "Arguments": {
+                "--TABLE_NAME.$": "$.TABLE_NAME",
+                "--PK.$": "$.PK",
+                "--JOB_NAME": "bronze-extract-incremental"
+              },
+              "WorkerType.$": "$.WORKER_TYPE",
+              "NumberOfWorkers": 2
+            },
+            "Catch": [
+              {
+                "ErrorEquals": [
+                  "States.ALL"
+                ],
+                "Next": "Failed"
+              }
+            ],
+            "End": true
+          },
+          "Failed": {
+            "Type": "Fail",
+            "Cause": "Glue Job failed for a table",
+            "Error": "JobFailed"
+          }
+        }
+      },
+      "End": true
+    }
+  }
+}

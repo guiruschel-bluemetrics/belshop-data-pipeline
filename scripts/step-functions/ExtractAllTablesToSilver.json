@@ -1,0 +1,44 @@
+{
+  "Comment": "State machine to extract multiple tables to Silver using a generic Glue Job",
+  "StartAt": "IterateOverTables",
+  "States": {
+    "IterateOverTables": {
+      "Type": "Map",
+      "ItemsPath": "$.tables_to_process",
+      "MaxConcurrency": 5,
+      "Iterator": {
+        "StartAt": "RunGlueJobForTable",
+        "States": {
+          "RunGlueJobForTable": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::glue:startJobRun.sync",
+            "Parameters": {
+              "JobName": "silver-processing",
+              "Arguments": {
+                "--SQL_FILE_NAME.$": "$.SQL_FILE_NAME",
+                "--TARGET_TABLE.$": "$.TARGET_TABLE",
+                "--JOB_NAME": "silver-processing",
+                "--WRITE_MODE.$": "$.WRITE_MODE"
+              }
+            },
+            "Catch": [
+              {
+                "ErrorEquals": [
+                  "States.ALL"
+                ],
+                "Next": "Failed"
+              }
+            ],
+            "End": true
+          },
+          "Failed": {
+            "Type": "Fail",
+            "Cause": "Glue Job failed for a table",
+            "Error": "JobFailed"
+          }
+        }
+      },
+      "End": true
+    }
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "Comment": "State machine to process platinum layer with Tier dependencies",
+  "StartAt": "ProcessTier1",
+  "States": {
+    "ProcessTier1": {
+      "Type": "Map",
+      "ItemsPath": "$.tables_to_process.tier_1",
+      "MaxConcurrency": 5,
+      "ResultPath": "$.Tier1Results",
+      "Next": "ProcessTier2",
+      "Iterator": {
+        "StartAt": "RunGlueJobTier1",
+        "States": {
+          "RunGlueJobTier1": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::glue:startJobRun.sync",
+            "Parameters": {
+              "JobName": "platinum-processing",
+              "Arguments": {
+                "--SQL_FILE_NAME.$": "$.SQL_FILE_NAME",
+                "--TARGET_TABLE.$": "$.TARGET_TABLE",
+                "--WRITE_MODE.$": "$.WRITE_MODE",
+                "--JOB_NAME": "platinum-processing"
+              }
+            },
+            "Catch": [
+              {
+                "ErrorEquals": [
+                  "States.ALL"
+                ],
+                "Next": "FailedTier1"
+              }
+            ],
+            "End": true
+          },
+          "FailedTier1": {
+            "Type": "Fail",
+            "Cause": "Glue Job failed in Tier 1",
+            "Error": "JobFailed"
+          }
+        }
+      }
+    },
+    "ProcessTier2": {
+      "Type": "Map",
+      "ItemsPath": "$.tables_to_process.tier_2",
+      "MaxConcurrency": 5,
+      "ResultPath": "$.Tier2Results",
+      "Next": "ProcessTier3",
+      "Iterator": {
+        "StartAt": "RunGlueJobTier2",
+        "States": {
+          "RunGlueJobTier2": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::glue:startJobRun.sync",
+            "Parameters": {
+              "JobName": "platinum-processing",
+              "Arguments": {
+                "--SQL_FILE_NAME.$": "$.SQL_FILE_NAME",
+                "--TARGET_TABLE.$": "$.TARGET_TABLE",
+                "--WRITE_MODE.$": "$.WRITE_MODE",
+                "--JOB_NAME": "platinum-processing"
+              }
+            },
+            "Catch": [
+              {
+                "ErrorEquals": [
+                  "States.ALL"
+                ],
+                "Next": "FailedTier2"
+              }
+            ],
+            "End": true
+          },
+          "FailedTier2": {
+            "Type": "Fail",
+            "Cause": "Glue Job failed in Tier 2",
+            "Error": "JobFailed"
+          }
+        }
+      }
+    },
+    "ProcessTier3": {
+      "Type": "Map",
+      "ItemsPath": "$.tables_to_process.tier_3",
+      "MaxConcurrency": 5,
+      "ResultPath": "$.Tier3Results",
+      "Next": "ProcessTier4",
+      "Iterator": {
+        "StartAt": "RunGlueJobTier3",
+        "States": {
+          "RunGlueJobTier3": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::glue:startJobRun.sync",
+            "Parameters": {
+              "JobName": "platinum-processing",
+              "Arguments": {
+                "--SQL_FILE_NAME.$": "$.SQL_FILE_NAME",
+                "--TARGET_TABLE.$": "$.TARGET_TABLE",
+                "--WRITE_MODE.$": "$.WRITE_MODE",
+                "--JOB_NAME": "platinum-processing"
+              }
+            },
+            "Catch": [
+              {
+                "ErrorEquals": [
+                  "States.ALL"
+                ],
+                "Next": "FailedTier3"
+              }
+            ],
+            "End": true
+          },
+          "FailedTier3": {
+            "Type": "Fail",
+            "Cause": "Glue Job failed in Tier 3",
+            "Error": "JobFailed"
+          }
+        }
+      }
+    },
+    "ProcessTier4": {
+      "Type": "Map",
+      "ItemsPath": "$.tables_to_process.tier_4",
+      "MaxConcurrency": 5,
+      "End": true,
+      "Iterator": {
+        "StartAt": "RunGlueJobTier4",
+        "States": {
+          "RunGlueJobTier4": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::glue:startJobRun.sync",
+            "Parameters": {
+              "JobName": "platinum-processing",
+              "Arguments": {
+                "--SQL_FILE_NAME.$": "$.SQL_FILE_NAME",
+                "--TARGET_TABLE.$": "$.TARGET_TABLE",
+                "--WRITE_MODE.$": "$.WRITE_MODE",
+                "--JOB_NAME": "platinum-processing"
+              }
+            },
+            "Catch": [
+              {
+                "ErrorEquals": [
+                  "States.ALL"
+                ],
+                "Next": "FailedTier4"
+              }
+            ],
+            "End": true
+          },
+          "FailedTier4": {
+            "Type": "Fail",
+            "Cause": "Glue Job failed in Tier 4",
+            "Error": "JobFailed"
+          }
+        }
+      }
+    }
+  }
+}

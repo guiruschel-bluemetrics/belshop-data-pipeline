@@ -1,0 +1,83 @@
+{
+  "Comment": "State machine to process Gold layer with Tier dependencies",
+  "StartAt": "ProcessTier1",
+  "States": {
+    "ProcessTier1": {
+      "Type": "Map",
+      "ItemsPath": "$.tables_to_process.tier_1",
+      "MaxConcurrency": 5,
+      "ResultPath": "$.Tier1Results",
+      "Next": "ProcessTier2",
+      "Iterator": {
+        "StartAt": "RunGlueJobTier1",
+        "States": {
+          "RunGlueJobTier1": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::glue:startJobRun.sync",
+            "Parameters": {
+              "JobName": "gold-processing",
+              "Arguments": {
+                "--SQL_FILE_NAME.$": "$.SQL_FILE_NAME",
+                "--TARGET_TABLE.$": "$.TARGET_TABLE",
+                "--WRITE_MODE.$": "$.WRITE_MODE",
+                "--JOB_NAME": "gold-processing"
+              }
+            },
+            "Catch": [
+              {
+                "ErrorEquals": [
+                  "States.ALL"
+                ],
+                "Next": "FailedTier1"
+              }
+            ],
+            "End": true
+          },
+          "FailedTier1": {
+            "Type": "Fail",
+            "Cause": "Glue Job failed in Tier 1",
+            "Error": "JobFailed"
+          }
+        }
+      }
+    },
+    "ProcessTier2": {
+      "Type": "Map",
+      "ItemsPath": "$.tables_to_process.tier_2",
+      "MaxConcurrency": 5,
+      "End": true,
+      "Iterator": {
+        "StartAt": "RunGlueJobTier2",
+        "States": {
+          "RunGlueJobTier2": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::glue:startJobRun.sync",
+            "Parameters": {
+              "JobName": "gold-processing",
+              "Arguments": {
+                "--SQL_FILE_NAME.$": "$.SQL_FILE_NAME",
+                "--TARGET_TABLE.$": "$.TARGET_TABLE",
+                "--WRITE_MODE.$": "$.WRITE_MODE",
+                "--JOB_NAME": "gold-processing"
+              }
+            },
+            "Catch": [
+              {
+                "ErrorEquals": [
+                  "States.ALL"
+                ],
+                "Next": "FailedTier2"
+              }
+            ],
+            "End": true
+          },
+          "FailedTier2": {
+            "Type": "Fail",
+            "Cause": "Glue Job failed in Tier 2",
+            "Error": "JobFailed"
+          }
+        }
+      }
+    }
+  }
+}

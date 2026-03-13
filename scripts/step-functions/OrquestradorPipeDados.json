@@ -1,0 +1,91 @@
+{
+  "Comment": "Pipeline Principal: Executa Bronze, Silver, Gold e Platinum sequencialmente.",
+  "StartAt": "RunBronzeLayer",
+  "States": {
+    "RunBronzeLayer": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::states:startExecution.sync:2",
+      "Parameters": {
+        "StateMachineArn": "arn:aws:states:us-east-1:013399894377:stateMachine:ExtractAllTablesToBronze",
+        "Input": {
+          "tables_to_process.$": "$.tables_to_process_bronze"
+        }
+      },
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "Next": "PipelineFailed"
+        }
+      ],
+      "ResultPath": "$.BronzeResult",
+      "Next": "RunSilverLayer"
+    },
+    "RunSilverLayer": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::states:startExecution.sync:2",
+      "Parameters": {
+        "StateMachineArn": "arn:aws:states:us-east-1:013399894377:stateMachine:ExtractAllTablesToSilver",
+        "Input": {
+          "tables_to_process.$": "$.tables_to_process_silver"
+        }
+      },
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "Next": "PipelineFailed"
+        }
+      ],
+      "ResultPath": "$.SilverResult",
+      "Next": "RunGoldLayer"
+    },
+    "RunGoldLayer": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::states:startExecution.sync:2",
+      "Parameters": {
+        "StateMachineArn": "arn:aws:states:us-east-1:013399894377:stateMachine:ExtractAllTablesToGold",
+        "Input": {
+          "tables_to_process.$": "$.tables_to_process_gold"
+        }
+      },
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "Next": "PipelineFailed"
+        }
+      ],
+      "ResultPath": "$.GoldResult",
+      "Next": "RunPlatinumLayer"
+    },
+    "RunPlatinumLayer": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::states:startExecution.sync:2",
+      "Parameters": {
+        "StateMachineArn": "arn:aws:states:us-east-1:013399894377:stateMachine:ExtractAllTablesToPlatinum",
+        "Input": {
+          "tables_to_process.$": "$.tables_to_process_platinum"
+        }
+      },
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "Next": "PipelineFailed"
+        }
+      ],
+      "ResultPath": "$.PlatinumResult",
+      "End": true
+    },
+    "PipelineFailed": {
+      "Type": "Fail",
+      "Cause": "Uma das camadas falhou.",
+      "Error": "LayerFailure"
+    }
+  }
+}
