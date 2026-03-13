@@ -1,0 +1,20 @@
+SELECT 
+    CONCAT('MICROVIX', '||', '-1') AS `FK Clientes`, 
+    CONCAT('MICROVIX', '||', '-1') AS `FK Vendedores`, 
+    E1.`codigo da empresa` AS `FK Empresas`, 
+    COALESCE(E1.`codigo do deposito`, '0') AS `FK Depositos`, 
+    CONCAT('MICROVIX', '||', E1.`codigo do produto`) AS `FK Produtos`, 
+    'MICROVIX' AS `Sistema Origem`, 
+    'VENDA PRODUTOS' AS `Operacao`, 
+    E1.`codigo do produto`, 
+    E1.`codigo da empresa`, 
+    E1.`data ultima saida`, 
+    E1.`data ultima entrada`, 
+    E1.`data primeira entrada`, 
+    E1.`ultimo custo`, 
+    E1.quantidade, 
+    CAST(NULL AS INT) AS `Dias Desde Ultima Saida`, 
+    CAST(NULL AS INT) AS `Dias Desde Ultima Entrada`, 
+    CAST(NULL AS INT) AS `Idade do Estoque`, 
+    CAST(NULL AS INT) AS `Dias Desde Primeira Entrada`
+FROM estoques_linx_principal AS E1

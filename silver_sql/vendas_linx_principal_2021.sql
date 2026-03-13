@@ -1,0 +1,25 @@
+SELECT 
+    UPPER(RTRIM(V.codigo_empresa))                        AS `Codigo da Empresa`,
+    UPPER(RTRIM(V.codigo_venda))                          AS `Codigo da Venda`,
+    UPPER(RTRIM(V.serie))                                 AS `Serie da Venda`,
+    UPPER(RTRIM(V.codigo_cliente))                        AS `Codigo do Cliente`,
+    UPPER(RTRIM(V.codigo_vendedor))                       AS `Codigo do Vendedor`,
+    V.data_venda                                          AS `Data da Venda`,
+    V.valor_venda_liquida_total                           AS `Valor da Venda Bruta Total`,
+    V.valor_troca_total                                   AS `Valor em Vale-Troca Total`,
+    (V.valor_venda_liquida_total - V.valor_troca_total)   AS `Valor da Venda Liquida Total`,
+    V.qtde_venda_bruta_total                              AS `Quantidade Venda Bruta Total`,
+    V.qtde_troca_total                                    AS `Quantidade Troca Total`,
+    V.qtde_venda_liquida_total                            AS `Quantidade Venda Liquida Total`,
+    V.custo_venda_total                                   AS `Custo da Venda Total`,
+    V.custo_troca_total                                   AS `Custo de Troca Total`,
+    V.frete                                               AS `Frete`,
+    CAST(NULL AS STRING)                                  AS `Codigo do Produto`,          
+    0                                                     AS `Quantidade Venda Itens`,
+    0                                                     AS `Valor da Venda Itens`,
+    0                                                     AS `Custo da Venda Itens`,
+    0                                                     AS `Quantidade Troca Itens`,
+    0                                                     AS `Valor de Troca Itens`,
+    0                                                     AS `Custo de Troca Itens`
+FROM vendas V
+WHERE CAST(V.data_venda AS DATE) >= TO_DATE('2021-01-01', 'yyyy-MM-dd');

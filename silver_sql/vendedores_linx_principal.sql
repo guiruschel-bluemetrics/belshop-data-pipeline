@@ -1,0 +1,3 @@
+SELECT DISTINCT UPPER(RTRIM(V.CODIGO)) AS `Codigo`,
+                UPPER(V.NOME) AS `Nome` 
+  FROM VENDEDORES V
